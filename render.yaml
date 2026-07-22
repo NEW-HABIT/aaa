@@ -1,0 +1,92 @@
+services:
+  # ── Django Web Service ──────────────────────────────────────────────
+  - type: web
+    name: tnu-backend
+    runtime: python
+    region: singapore          # closest to India / Supabase ap-south-1
+    plan: free
+    rootDir: backend
+
+    buildCommand: "./render-build.sh"
+    startCommand: "./start.sh"
+
+    healthCheckPath: /api/health/
+
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.production
+
+      - key: DJANGO_SECRET_KEY
+        sync: false            # set manually in Render dashboard
+
+      - key: DJANGO_DEBUG
+        value: "False"
+
+      - key: DJANGO_ALLOWED_HOSTS
+        value: tnu-backend.onrender.com
+
+      - key: DATABASE_URL
+        sync: false            # Supabase PostgreSQL URL
+
+      - key: REDIS_URL
+        sync: false            # Upstash Redis URL
+
+      - key: CELERY_BROKER_URL
+        sync: false            # Upstash Redis URL (db 1)
+
+      - key: CELERY_RESULT_BACKEND
+        sync: false            # Upstash Redis URL (db 2)
+
+      - key: GEMINI_API_KEY
+        sync: false
+
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash-lite
+
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://tnu-timetable.vercel.app
+
+      - key: EMAIL_HOST
+        sync: false
+
+      - key: EMAIL_PORT
+        value: "587"
+
+      - key: EMAIL_USE_TLS
+        value: "True"
+
+      - key: EMAIL_HOST_USER
+        sync: false
+
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+
+      - key: DEFAULT_FROM_EMAIL
+        value: noreply@neotiauniversity.edu.in
+
+      - key: JWT_ACCESS_TOKEN_LIFETIME_MINUTES
+        value: "60"
+
+      - key: JWT_REFRESH_TOKEN_LIFETIME_DAYS
+        value: "7"
+
+      - key: SOLVER_TIME_LIMIT_SECONDS
+        value: "300"
+
+      - key: SOLVER_MAX_WORKERS
+        value: "2"
+
+      - key: UNIVERSITY_NAME
+        value: The Neotia University
+
+      - key: UNIVERSITY_SHORT_NAME
+        value: TNU
+
+      - key: UNIVERSITY_WEBSITE
+        value: https://www.neotiauniversity.edu.in
+
+      - key: UNIVERSITY_ADDRESS
+        value: "Diamond Harbour Road, Sarisha, West Bengal 743368"
+
+      - key: SENTRY_DSN
+        value: ""              # optional — fill in Sentry if used
